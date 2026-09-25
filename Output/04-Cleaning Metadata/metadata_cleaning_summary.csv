@@ -1,0 +1,10 @@
+metric,value
+raw_row_count,94327
+clean_row_count,77698
+total_rows_removed,16629
+retention_rate_pct,82.37
+dropped_null_title,9
+dropped_no_image,16620
+dropped_duplicates,0
+price_null_pct,48.39
+final_columns,"['parent_asin', 'title', 'main_category', 'subcategory', 'brand', 'price', 'average_rating', 'rating_number', 'image_url', 'features']"

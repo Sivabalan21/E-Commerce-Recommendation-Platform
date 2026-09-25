@@ -1,0 +1,22 @@
+metric,value
+total_rows,2128605
+total_columns,10
+unique_users,1808565
+unique_asins,101011
+unique_parent_asins,93671
+avg_rating,4.2215
+pct_5_star,69.82
+pct_1_star,11.77
+invalid_ratings,0
+pct_verified_purchase,95.84
+null_text_rows,0
+no_alpha_text_rows,4141
+has_html_in_text,159509
+avg_text_length_chars,169.51
+exact_duplicates,22657
+user_asin_duplicate_pairs,19143
+zero_helpful_vote_reviews,1719985
+asin_equals_parent_asin,1390229
+asin_differs_parent_asin,738376
+oldest_review,2000-10-23 14:37:23
+newest_review,2023-09-12 16:29:17.016000

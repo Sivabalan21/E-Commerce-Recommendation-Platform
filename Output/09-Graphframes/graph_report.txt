@@ -1,0 +1,176 @@
+
+============================================================
+STEP 1 — LOADING DATA
+============================================================
+Reviews loaded   : 1,872,816
+Products loaded  : 77,698
+
+============================================================
+STEP 2 — BUILDING CO-PURCHASE GRAPH
+============================================================
+Finding users who reviewed multiple products...
+Users with 2+ products : 202,618
+Creating product pairs from co-reviews...
+Total co-purchase edges : 448,393
+Aggregating edge weights...
+Unique weighted edges   : 391,037
+
+Top 10 strongest co-purchase pairs:
+src             dst                 weight
+------------------------------------------
+B00PBF3T3E      B012YQL5IS             274
+B002YPC2NM      B0BTV3G59T             134
+B009K2BBQG      B07P3Y8JWY             125
+B000AST3AK      B01BIDPHYQ             118
+B002YPC2NM      B002YPIM40             113
+B008I42AUS      B0BTV3G59T             105
+B0B57GSDMD      B0BMV7X9YJ             105
+B072JL5W21      B092LLM7H3             102
+B00UXG4WR8      B07PNYLS9M             101
+B00VBP8QPO      B07PNYLS9M              97
+
+============================================================
+STEP 3 — BUILDING GRAPH VERTICES
+============================================================
+Total vertices (products) : 77,633
+
+============================================================
+STEP 4 — CREATING GRAPHFRAME
+============================================================
+GraphFrame created.
+  Vertices : 77,633
+  Edges    : 391,037
+
+============================================================
+STEP 5 — RUNNING PAGERANK
+============================================================
+Running PageRank...
+  resetProbability : 0.15 (standard damping factor)
+  maxIter          : 10
+PageRank computed for 77,633 products.
+
+PageRank score statistics:
+  Min    : 0.4290509332116738
+  Max    : 648.7072188902782
+  Avg    : 1.0
+  Stddev : 6.612367
+
+Top 15 products by PageRank score:
+parent_asin       pagerank_score
+---------------------------------
+B0CFMQLYHG            648.707219
+B0CDGZZPSY            467.099554
+B0C9DPRT35            444.350591
+B0CB3RT8ZV            438.257994
+B0C7GKM91B            359.212981
+B0C7ZFZ7W7            306.273326
+B0C5PR3NWJ            304.253879
+B0C7TRJCL4            299.213802
+B0C9TTZW3K            291.473817
+B0CBSGSG5H            280.133417
+B0C7CC35KH            271.561004
+B0CBQFJQ6F            263.613864
+B0C7GCZ44M            263.193058
+B0CCQYBVT9            252.703041
+B0C85M2F4G            249.120579
+
+============================================================
+STEP 6 — NORMALIZING PAGERANK SCORES
+============================================================
+PageRank scores normalized to [0, 1] range.
+Sample normalized scores:
+parent_asin        raw_score   normalized
+------------------------------------------
+B0CFMQLYHG        648.707219     1.000000
+B0CDGZZPSY        467.099554     0.719862
+B0C9DPRT35        444.350591     0.684770
+B0CB3RT8ZV        438.257994     0.675372
+B0C7GKM91B        359.212981     0.553441
+B0C7ZFZ7W7        306.273326     0.471779
+B0C5PR3NWJ        304.253879     0.468664
+B0C7TRJCL4        299.213802     0.460890
+B0C9TTZW3K        291.473817     0.448950
+B0CBSGSG5H        280.133417     0.431457
+
+============================================================
+STEP 7 — COMMUNITY DETECTION (Label Propagation)
+============================================================
+Running label propagation for community detection...
+  maxIter : 5
+Communities found : 30,730
+
+Community size distribution (top 15):
+community_label        product_count
+-------------------------------------
+936302870611                  44,570
+1168231104898                    588
+627065225243                     243
+515396075675                     123
+1090921693238                     92
+51539607685                       38
+1305670058328                     35
+206158430602                      34
+858993459552                      34
+1116691497366                     27
+429496729837                      26
+695784701995                      24
+1657857376307                     24
+429496729846                      23
+936302870665                      20
+
+============================================================
+STEP 8 — JOINING PAGERANK WITH METADATA
+============================================================
+Products with PageRank + metadata : 77,633
+
+Top 10 products by PageRank with metadata:
+parent_asin     title                                       pr_norm brand               
+----------------------------------------------------------------------------------------
+B0CFMQLYHG      hOmeLabs Chill Pill Countertop Ice Make      1.0000 Homelabs            
+B0CDGZZPSY      Waterdrop 4396508 Replacement for Whirl      0.7199 Waterdrop           
+B0C9DPRT35      Waterdrop WF1CB Replacement for Frigida      0.6848 Waterdrop           
+B0CB3RT8ZV      AQUA CREST DW2042FR-09 Refrigerator Wat      0.6754 Aqua Crest          
+B0C7GKM91B      EcoAqua EFF-6027A Replacement Filter, C      0.5534 Ecoaqua             
+B0C7ZFZ7W7      Hamilton Beach Permanent Gold Tone Filt      0.4718 Hamilton Beach      
+B0C5PR3NWJ      Waterdrop MWF Water Filter for GE® Refr      0.4687 Waterdrop           
+B0C7TRJCL4      Waterdrop UKF8001 Refrigerator Water Fi      0.4609 Waterdrop           
+B0C9TTZW3K      GE Profile Opal 2.0 | Countertop Nugget      0.4490 Ge Profile          
+B0CBSGSG5H      SAMSUNG DC97-14486A Heater Duct Assembl      0.4315 Samsung             
+
+============================================================
+STEP 9 — JOINING COMMUNITIES WITH METADATA
+============================================================
+Comparing communities with categories:
+(communities should roughly align with product categories)
+
+Top community-category pairs:
+label                main_category                          count
+-----------------------------------------------------------------
+0                    Tools & Home Improvement                   1
+1                    Tools & Home Improvement                   1
+6                    Tools & Home Improvement                   1
+8                    Tools & Home Improvement                   1
+10                   Tools & Home Improvement                   1
+11                   Tools & Home Improvement                   1
+16                   Tools & Home Improvement                   1
+20                   None                                       1
+22                   Amazon Home                                1
+29                   Amazon Home                                1
+33                   Tools & Home Improvement                   1
+34                   Tools & Home Improvement                   1
+39                   Industrial & Scientific                    1
+42                   Appliances                                 1
+47                   Appliances                                 4
+52                   Tools & Home Improvement                   1
+53                   Tools & Home Improvement                   1
+60                   Appliances                                 1
+61                   Tools & Home Improvement                   1
+62                   Tools & Home Improvement                   1
+
+============================================================
+STEP 10 — SAVING OUTPUTS
+============================================================
+PageRank scores saved  : hdfs:///user/ss21176_nyu_edu/ecommerce/graph/appliances/pagerank_scores
+PageRank + metadata    : hdfs:///user/ss21176_nyu_edu/ecommerce/graph/appliances/pagerank_with_metadata
+Communities saved      : hdfs:///user/ss21176_nyu_edu/ecommerce/graph/appliances/communities
+Tableau CSV saved      : hdfs:///user/ss21176_nyu_edu/ecommerce/graph/appliances/pagerank_tableau

@@ -1,0 +1,55 @@
+
+============================================================
+STEP 1 — LOADING AND PREPARING DATA
+============================================================
+Total interactions : 1,872,816
+Unique users       : 1,654,544
+Unique products    : 75,940
+Matrix density     : 0.001491%
+Rating range       : 1.0 to 5.0, avg=4.2221
+
+============================================================
+STEP 2 — STRING INDEXING
+============================================================
+Fitting user and product StringIndexers in one pipeline pass...
+user_index range    : 0 to 1,590,982
+product_index range : 0 to 77,632
+StringIndexer models saved.
+
+============================================================
+STEP 3 — TRAIN TEST SPLIT
+============================================================
+Training rows (approx) : 1,498,252
+Test rows (approx)     : 374,564
+
+============================================================
+STEP 4 — ALS TRAINING
+============================================================
+Single run: rank=20 regParam=0.1 maxIter=10
+
+============================================================
+STEP 5 — MODEL EVALUATION
+============================================================
+Train RMSE : 0.1614
+Test RMSE  : 2.2436
+Test MAE   : 1.9342
+
+============================================================
+STEP 6 — GENERATING RECOMMENDATIONS
+============================================================
+Generating top 10 recommendations for all users...
+Users with recommendations : 1,307,046
+
+Sample (2 users):
+  user_index=31 → [(35117, 8.723), (57046, 8.718), (35639, 8.677)]...
+  user_index=53 → [(25693, 7.903), (77556, 7.823), (33815, 7.822)]...
+
+============================================================
+STEP 7 — SAVING OUTPUTS
+============================================================
+ALS model saved       : hdfs:///user/ss21176_nyu_edu/ecommerce/models/appliances/als_model
+Recommendations saved : hdfs:///user/ss21176_nyu_edu/ecommerce/models/appliances/user_recommendations
+User factors saved    : hdfs:///user/ss21176_nyu_edu/ecommerce/models/appliances/user_factors
+Item factors saved    : hdfs:///user/ss21176_nyu_edu/ecommerce/models/appliances/item_factors
+User factors shape    : 1,307,046 x rank 20
+Item factors shape    : 71,937 x rank 20

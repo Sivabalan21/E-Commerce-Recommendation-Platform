@@ -1,0 +1,10 @@
+metric,value
+total_rows_scored,1872816
+positive_count,1379369
+neutral_count,240784
+negative_count,252663
+positive_pct,73.65
+neutral_pct,12.86
+negative_pct,13.49
+high_rating_neg_sentiment,79138
+low_rating_pos_sentiment,92439

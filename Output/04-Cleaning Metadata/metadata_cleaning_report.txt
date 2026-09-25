@@ -1,0 +1,126 @@
+
+============================================================
+STEP 1 — LOADING RAW METADATA
+============================================================
+Raw row count          : 94,327
+Columns                : ['parent_asin', 'title', 'main_category', 'store', 'price', 'average_rating', 'rating_number', 'features', 'description', 'categories', 'bought_together', 'images']
+
+============================================================
+STEP 2 — DROP NULL parent_asin OR title
+============================================================
+Rows dropped           : 9
+Rows remaining         : 94,318
+
+============================================================
+STEP 3 — DROP PRODUCTS WITH NO HI_RES IMAGE
+============================================================
+Rows dropped           : 16,620
+Rows remaining         : 77,698
+
+============================================================
+STEP 4 — NORMALIZE STORE NAME
+============================================================
+Before normalization — top brand variants:
+After normalization — same brands:
+
+============================================================
+STEP 5 — EXTRACT LEAF SUBCATEGORY
+============================================================
+Leaf subcategory distribution (top 10):
+
+============================================================
+STEP 6 — EXTRACT IMAGE URL
+============================================================
+Products with image URL : 77,698
+
+============================================================
+STEP 7 — PRICE HANDLING
+============================================================
+Products with price     : 40,097  (51.61%)
+Products without price  : 37,601  (48.39%)
+
+NOTE: Null prices are kept as null.
+Price will be displayed as 'Price not available' in the app.
+
+============================================================
+STEP 8 — DEDUPLICATE BY parent_asin
+============================================================
+Duplicate rows removed  : 0
+Rows remaining          : 77,698
+
+============================================================
+STEP 9 — STRIP HTML FROM TITLE
+============================================================
+HTML stripped from title field.
+
+============================================================
+STEP 10 — SELECT FINAL COLUMNS
+============================================================
+Final columns:
+  parent_asin
+  title
+  main_category
+  subcategory
+  brand
+  price
+  average_rating
+  rating_number
+  image_url
+  features
+
+============================================================
+STEP 11 — FINAL VALIDATION
+============================================================
+Raw row count          : 94,327
+Clean row count        : 77,698
+Total rows removed     : 16,629
+Retention rate         : 82.37%
+
+Breakdown of rows removed:
+  Null parent_asin or title    : 9
+  Missing hi_res image         : 16,620
+  Duplicate parent_asin        : 0
+
+Null check on clean dataset:
+
+Column                      Null Count
+----------------------------------------
+parent_asin                          0
+title                                0
+main_category                    3,750
+subcategory                          0
+brand                                0
+price                           37,601
+average_rating                       0
+rating_number                        0
+image_url                            0
+features                             0
+
+Sample clean records (2 rows):
+
+  Record 1:
+    parent_asin    : 1926644743
+    title          : More Time Moms 2019 Family Organizer Wall Calendar (Sept 2018 to Dec 2019) - Org
+    main_category  : Office Products
+    subcategory    : Portable Washers
+    brand          : Mosajie
+    price          : None
+    average_rating : 4.6
+    image_url      : https://m.media-amazon.com/images/I/71NoagEoOjL._AC_SL1500_.
+
+  Record 2:
+    parent_asin    : 7301113188
+    title          : Tupperware Freezer Square Round Container Set of 6
+    main_category  : Appliances
+    subcategory    : Refrigerators, Freezers & Ice Makers
+    brand          : Tupperware
+    price          : None
+    average_rating : 5.0
+    image_url      : https://m.media-amazon.com/images/I/61gtAfIGkzL._AC_SL1236_.
+
+============================================================
+STEP 12 — SAVING CLEAN DATA
+============================================================
+Clean data saved as Parquet.
+Location : hdfs:///user/ss21176_nyu_edu/ecommerce/cleaning/appliances/metadata/cleaned_metadata
+Rows     : 77,698

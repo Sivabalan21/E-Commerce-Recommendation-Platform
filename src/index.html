@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartCart — AI Recommendations</title>
+<link href="https://fonts.googleapis.com/css2?family=Ember:wght@400;700&family=Amazon+Ember:wght@300;400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --amazon-orange: #FF9900;
+    --amazon-dark: #131921;
+    --amazon-blue: #232F3E;
+    --amazon-light-blue: #37475A;
+    --amazon-yellow: #FEBD69;
+    --amazon-green: #067D62;
+    --amazon-red: #B12704;
+    --amazon-gray: #F3F3F3;
+    --amazon-border: #DDD;
+    --amazon-text: #0F1111;
+    --amazon-secondary: #565959;
+    --amazon-link: #007185;
+    --star-color: #FFA41C;
+    --card-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    --card-hover: 0 4px 12px rgba(0,0,0,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Amazon Ember', 'Arial', sans-serif;
+    background: var(--amazon-gray);
+    color: var(--amazon-text);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--amazon-dark);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    gap: 12px;
+  }
+
+  .logo {
+    color: white;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .logo span {
+    color: var(--amazon-orange);
+  }
+
+  .logo .dot {
+    width: 8px;
+    height: 8px;
+    background: var(--amazon-orange);
+    border-radius: 50%;
+    display: inline-block;
+    margin-bottom: -2px;
+  }
+
+  .search-bar {
+    flex: 1;
+    display: flex;
+    max-width: 800px;
+  }
+
+  .search-bar input {
+    flex: 1;
+    padding: 10px 14px;
+    border: none;
+    border-radius: 4px 0 0 4px;
+    font-size: 14px;
+    outline: none;
+  }
+
+  .search-bar button {
+    background: var(--amazon-orange);
+    border: none;
+    padding: 10px 16px;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background 0.2s;
+  }
+
+  .search-bar button:hover { background: #e68a00; }
+
+  .header-nav {
+    background: var(--amazon-blue);
+    padding: 6px 16px;
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+
+  .nav-btn {
+    color: white;
+    background: none;
+    border: 1px solid transparent;
+    padding: 4px 10px;
+    border-radius: 2px;
+    cursor: pointer;
+    font-size: 13px;
+    white-space: nowrap;
+    transition: border-color 0.15s;
+  }
+
+  .nav-btn:hover { border-color: white; }
+  .nav-btn.active { border-color: var(--amazon-orange); color: var(--amazon-orange); }
+
+  /* ── MAIN LAYOUT ── */
+  .main-container {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 16px;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    background: white;
+    border-radius: 4px;
+    padding: 16px;
+    border: 1px solid var(--amazon-border);
+    box-shadow: var(--card-shadow);
+    position: sticky;
+    top: 80px;
+  }
+
+  .sidebar h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--amazon-border);
+    color: var(--amazon-text);
+  }
+
+  .sidebar-section {
+    margin-bottom: 20px;
+  }
+
+  .sidebar-section h4 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--amazon-text);
+  }
+
+  .user-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .user-input-group input {
+    padding: 8px 10px;
+    border: 1px solid var(--amazon-border);
+    border-radius: 4px;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .user-input-group input:focus {
+    border-color: var(--amazon-orange);
+    box-shadow: 0 0 0 3px rgba(255,153,0,0.15);
+  }
+
+  .btn-primary {
+    background: linear-gradient(to bottom, #f7dfa5, #f0c14b);
+    border: 1px solid #a88734;
+    color: #111;
+    padding: 8px 16px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    width: 100%;
+    transition: all 0.15s;
+    text-align: center;
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(to bottom, #f5d78e, #eeb933);
+  }
+
+  .btn-simulate {
+    background: linear-gradient(to bottom, #f19722, #e47911);
+    border: 1px solid #c45500;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    width: 100%;
+    transition: all 0.15s;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .btn-simulate:hover { background: linear-gradient(to bottom, #e68a00, #cc6600); }
+
+  .api-config {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--amazon-border);
+  }
+
+  .api-config label {
+    font-size: 11px;
+    color: var(--amazon-secondary);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .api-config input {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid var(--amazon-border);
+    border-radius: 3px;
+    font-size: 12px;
+    margin-bottom: 8px;
+    font-family: monospace;
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    margin-top: 8px;
+  }
+
+  .status-badge.online { background: #e7f5e7; color: var(--amazon-green); }
+  .status-badge.offline { background: #fce8e8; color: var(--amazon-red); }
+  .status-badge.checking { background: #fff3e0; color: #e68a00; }
+
+  .status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  /* ── CONTENT AREA ── */
+  .content {
+    min-height: 600px;
+  }
+
+  /* ── HERO BANNER ── */
+  .hero-banner {
+    background: linear-gradient(135deg, #232F3E 0%, #37475A 50%, #131921 100%);
+    border-radius: 4px;
+    padding: 24px 32px;
+    margin-bottom: 16px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid var(--amazon-border);
+  }
+
+  .hero-text h1 {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .hero-text h1 span { color: var(--amazon-orange); }
+
+  .hero-text p {
+    font-size: 13px;
+    color: #ccc;
+    max-width: 500px;
+    line-height: 1.5;
+  }
+
+  .hero-badges {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+  }
+
+  .hero-badge {
+    background: rgba(255,153,0,0.15);
+    border: 1px solid var(--amazon-orange);
+    color: var(--amazon-orange);
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    background: white;
+    border: 1px solid var(--amazon-border);
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: var(--card-shadow);
+  }
+
+  .section-header h2 {
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .section-header .meta {
+    font-size: 12px;
+    color: var(--amazon-secondary);
+  }
+
+  /* ── PRODUCT GRID ── */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .product-card {
+    background: white;
+    border: 1px solid var(--amazon-border);
+    border-radius: 4px;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    box-shadow: var(--card-shadow);
+  }
+
+  .product-card:hover {
+    box-shadow: var(--card-hover);
+    border-color: #999;
+  }
+
+  .product-rank {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: var(--amazon-orange);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 2px;
+  }
+
+  .product-image {
+    width: 100%;
+    height: 160px;
+    object-fit: contain;
+    margin-bottom: 10px;
+    background: #f5f5f5;
+    border-radius: 2px;
+  }
+
+  .product-image-placeholder {
+    width: 100%;
+    height: 160px;
+    background: linear-gradient(135deg, #f5f5f5, #e8e8e8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    margin-bottom: 10px;
+    border-radius: 2px;
+  }
+
+  .product-title {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--amazon-link);
+    line-height: 1.4;
+    margin-bottom: 6px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .product-title:hover { color: var(--amazon-red); text-decoration: underline; }
+
+  .product-brand {
+    font-size: 11px;
+    color: var(--amazon-secondary);
+    margin-bottom: 4px;
+  }
+
+  .stars {
+    color: var(--star-color);
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+
+  .product-price {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--amazon-red);
+    margin-bottom: 6px;
+  }
+
+  .product-price .currency { font-size: 12px; vertical-align: super; }
+
+  .score-bar-container {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .score-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--amazon-secondary);
+    margin-bottom: 3px;
+  }
+
+  .score-bar {
+    height: 4px;
+    background: #eee;
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 3px;
+  }
+
+  .score-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+
+  .score-fill.als { background: var(--amazon-link); }
+  .score-fill.pr { background: var(--amazon-green); }
+  .score-fill.final { background: var(--amazon-orange); }
+
+  .sentiment-badge {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+
+  .sentiment-badge.Positive { background: #e7f5e7; color: var(--amazon-green); }
+  .sentiment-badge.Negative { background: #fce8e8; color: var(--amazon-red); }
+  .sentiment-badge.Neutral  { background: #f0f0f0; color: var(--amazon-secondary); }
+
+  /* ── SIMULATE RESULTS ── */
+  .simulate-results {
+    background: white;
+    border: 1px solid var(--amazon-border);
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: var(--card-shadow);
+  }
+
+  .simulate-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .stat-card {
+    background: var(--amazon-gray);
+    border: 1px solid var(--amazon-border);
+    border-radius: 4px;
+    padding: 12px;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--amazon-orange);
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--amazon-secondary);
+    margin-top: 2px;
+  }
+
+  .charts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .chart-container {
+    background: var(--amazon-gray);
+    border: 1px solid var(--amazon-border);
+    border-radius: 4px;
+    padding: 16px;
+  }
+
+  .chart-container h4 {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--amazon-text);
+  }
+
+  .chart-wrapper {
+    position: relative;
+    height: 200px;
+  }
+
+  /* ── LOADING ── */
+  .loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px;
+    background: white;
+    border: 1px solid var(--amazon-border);
+    border-radius: 4px;
+  }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #f0f0f0;
+    border-top-color: var(--amazon-orange);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 16px;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading p { color: var(--amazon-secondary); font-size: 14px; }
+
+  /* ── WELCOME ── */
+  .welcome-state {
+    background: white;
+    border: 1px solid var(--amazon-border);
+    border-radius: 4px;
+    padding: 60px;
+    text-align: center;
+  }
+
+  .welcome-state .icon { font-size: 64px; margin-bottom: 16px; }
+  .welcome-state h3 { font-size: 20px; margin-bottom: 8px; }
+  .welcome-state p { color: var(--amazon-secondary); font-size: 14px; max-width: 400px; margin: 0 auto; }
+
+  /* ── ERROR ── */
+  .error-banner {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: 4px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #856404;
+    margin-bottom: 12px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--amazon-dark);
+    color: #ccc;
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+    font-size: 12px;
+  }
+
+  footer strong { color: var(--amazon-orange); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .main-container { grid-template-columns: 1fr; }
+    .sidebar { position: static; }
+    .charts-grid { grid-template-columns: 1fr; }
+    .simulate-stats { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ── ANIMATIONS ── */
+  .product-card { animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .product-card:nth-child(1) { animation-delay: 0.05s; }
+  .product-card:nth-child(2) { animation-delay: 0.10s; }
+  .product-card:nth-child(3) { animation-delay: 0.15s; }
+  .product-card:nth-child(4) { animation-delay: 0.20s; }
+  .product-card:nth-child(5) { animation-delay: 0.25s; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-top">
+    <a class="logo" href="#">Smart<span>Cart</span><span class="dot"></span></a>
+    <div class="search-bar">
+      <input type="text" placeholder="Search products, brands and categories..." id="searchInput">
+      <button>🔍</button>
+    </div>
+  </div>
+  <div class="header-nav">
+    <button class="nav-btn active" onclick="setMode('recommend')">🎯 Personal Recommendations</button>
+    <button class="nav-btn" onclick="setMode('simulate')">⚡ Simulate 10,000 Users</button>
+    <span style="margin-left:auto; color:#aaa; font-size:12px;">Powered by ALS + PageRank + Ray Serve</span>
+  </div>
+</header>
+
+<!-- MAIN -->
+<div class="main-container">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h3>🤖 SmartCart AI</h3>
+
+    <!-- USER RECOMMENDATION PANEL -->
+    <div class="sidebar-section" id="userPanel">
+      <h4>Find Your Recommendations</h4>
+      <div class="user-input-group">
+        <input
+          type="text"
+          id="userIdInput"
+          placeholder="Enter User ID..."
+          onkeypress="if(event.key==='Enter') getRecommendations()"
+        >
+        <button class="btn-primary" onclick="getRecommendations()">
+          Get My Recommendations →
+        </button>
+      </div>
+      <div style="margin-top:10px;">
+        <div style="font-size:11px; color:var(--amazon-secondary); margin-bottom:6px;">Try a demo user:</div>
+        <div id="demoUsersList" style="display:flex; flex-direction:column; gap:4px;"></div>
+      </div>
+    </div>
+
+    <!-- SIMULATE PANEL -->
+    <div class="sidebar-section" id="simulatePanel" style="display:none;">
+      <h4>Simulate User Behavior</h4>
+      <p style="font-size:12px; color:var(--amazon-secondary); margin-bottom:12px; line-height:1.5;">
+        Randomly select 10,000 users and compute real-time recommendations using Ray Serve distributed inference.
+      </p>
+      <div style="font-size:12px; margin-bottom:10px;">
+        <label style="display:flex; align-items:center; gap:6px; margin-bottom:6px;">
+          <span>Users to simulate:</span>
+        </label>
+        <input type="range" id="nUsersSlider" min="1000" max="10000" step="1000" value="10000"
+          oninput="document.getElementById('nUsersVal').textContent=this.value"
+          style="width:100%; margin-bottom:4px;">
+        <div style="text-align:center; font-weight:700; color:var(--amazon-orange);">
+          <span id="nUsersVal">10,000</span> users
+        </div>
+      </div>
+      <button class="btn-simulate" onclick="simulate()">
+        ⚡ Run Simulation
+      </button>
+    </div>
+
+    <!-- API CONFIG -->
+    <div class="api-config">
+      <label>API Endpoint</label>
+      <input type="text" id="apiEndpoint" value="https://amaretto-unwelcome-whacking.ngrok-free.dev" placeholder="http://your-runpod-ip:8000">
+      <label>API Key</label>
+      <input type="text" id="apiKey" value="smartcart-2026" placeholder="your-api-key">
+    </div>
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <!-- HERO BANNER -->
+    <div class="hero-banner">
+      <div class="hero-text">
+        <h1>AI-Powered <span>Product Recommendations</span></h1>
+        <p>Built on 1.87M Amazon appliance reviews using Collaborative Filtering (ALS) combined with Graph-based PageRank reranking, served in real-time via Ray Serve.</p>
+      </div>
+      <div class="hero-badges">
+        <span class="hero-badge">🧠 ALS Matrix Factorization</span>
+        <span class="hero-badge">📊 GraphFrames PageRank</span>
+        <span class="hero-badge">⚡ Ray Serve Pipeline</span>
+        <span class="hero-badge">💬 VADER Sentiment Analysis</span>
+      </div>
+    </div>
+
+    <!-- ERROR BANNER -->
+    <div class="error-banner" id="errorBanner" style="display:none;"></div>
+
+    <!-- MAIN DISPLAY AREA -->
+    <div id="mainDisplay">
+      <div class="welcome-state">
+        <div class="icon">🛒</div>
+        <h3>Welcome to SmartCart</h3>
+        <p>Enter a User ID to get personalized recommendations, or run a simulation to see how 10,000 users are served simultaneously.</p>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <strong>SmartCart</strong> — NYU CSCI-GA.2437 Big Data Application Development, Spring 2026 |
+  Built with Apache Spark, GraphFrames, VADER Sentiment Analysis & Ray Serve
+</footer>
+
+<script>
+// ── CONFIG ──
+const DEMO_USERS = [
+  "AGKHLEW2SOWHNMFQIJGBECAF7INQ",
+  "AECPFYFQVRUWC3KGNLJIOREFP5LQ",
+  "AGHLRXZCRZHZF3HGKU5LKWJLQKBA",
+  "AE3X4V5ZSTJGQW2QMJKP5AULBBHQ",
+  "AFBMGQHDTFCUTHX3R76QXIOVTACQ"
+];
+
+let currentMode = 'recommend';
+let brandChart = null;
+let categoryChart = null;
+
+// ── INIT ──
+window.onload = () => {
+  populateDemoUsers();
+};
+
+function getConfig() {
+  return {
+    endpoint : document.getElementById('apiEndpoint').value.trim().replace(/\/$/, ''),
+    apiKey   : document.getElementById('apiKey').value.trim()
+  };
+}
+
+// ── MODE SWITCH ──
+function setMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.nav-btn').forEach((b, i) => {
+    b.classList.toggle('active', i === (mode === 'recommend' ? 0 : 1));
+  });
+  document.getElementById('userPanel').style.display     = mode === 'recommend' ? 'block' : 'none';
+  document.getElementById('simulatePanel').style.display = mode === 'simulate'  ? 'block' : 'none';
+
+  document.getElementById('mainDisplay').innerHTML = `
+    <div class="welcome-state">
+      <div class="icon">${mode === 'recommend' ? '🎯' : '⚡'}</div>
+      <h3>${mode === 'recommend' ? 'Personal Recommendations' : 'Mass Simulation'}</h3>
+      <p>${mode === 'recommend'
+        ? 'Enter your User ID and click Get My Recommendations.'
+        : 'Click Run Simulation to compute recommendations for thousands of users in real-time.'
+      }</p>
+    </div>`;
+}
+
+// ── DEMO USERS ──
+function populateDemoUsers() {
+  const list = document.getElementById('demoUsersList');
+  DEMO_USERS.forEach(uid => {
+    const btn = document.createElement('button');
+    btn.style.cssText = `
+      background: none; border: 1px solid var(--amazon-border);
+      border-radius: 3px; padding: 4px 8px; font-size: 11px;
+      cursor: pointer; text-align: left; color: var(--amazon-link);
+      transition: background 0.15s; font-family: monospace;
+    `;
+    btn.textContent = uid.substring(0, 24) + '...';
+    btn.title = uid;
+    btn.onmouseover = () => btn.style.background = '#f0f0f0';
+    btn.onmouseout  = () => btn.style.background = 'none';
+    btn.onclick = () => {
+      document.getElementById('userIdInput').value = uid;
+      getRecommendations();
+    };
+    list.appendChild(btn);
+  });
+}
+
+// ── HEALTH CHECK ──
+async function checkHealth() {
+  const { endpoint, apiKey } = getConfig();
+  const badge = document.getElementById('statusBadge');
+  badge.className = 'status-badge checking';
+  badge.innerHTML = '<span class="status-dot"></span> Checking...';
+
+  try {
+    const res = await fetch(`${endpoint}/health`, {
+      headers: { 'X-API-Key': apiKe, 'ngrok-skip-browser-warning': 'true' },
+      signal: AbortSignal.timeout(1000000)
+    });
+    if (res.ok) {
+      const data = await res.json();
+      badge.className = 'status-badge online';
+      badge.innerHTML = `<span class="status-dot"></span> Online — ${data.model || 'ALS+PageRank'}`;
+    } else {
+      throw new Error(`HTTP ${res.status}`);
+    }
+  } catch (e) {
+    badge.className = 'status-badge offline';
+    badge.innerHTML = '<span class="status-dot"></span> Offline (using demo data)';
+  }
+}
+
+// ── SHOW ERROR ──
+function showError(msg) {
+  const b = document.getElementById('errorBanner');
+  b.style.display = 'block';
+  b.textContent = `⚠ ${msg}`;
+  setTimeout(() => b.style.display = 'none', 8000);
+}
+
+// ── STARS ──
+function renderStars(rating) {
+  const full  = Math.floor(rating);
+  const half  = rating % 1 >= 0.5 ? 1 : 0;
+  const empty = 5 - full - half;
+  return '★'.repeat(full) + (half ? '½' : '') + '☆'.repeat(empty);
+}
+
+// ── PRODUCT CARD ──
+function renderProductCard(rec, index) {
+  const price    = rec.price && rec.price > 0 ? `$${rec.price.toFixed(2)}` : 'Price N/A';
+  const rating   = rec.average_rating || 4.0;
+  const sentiment= rec.sentiment_label || 'Positive';
+  const imgUrl   = rec.image_url && rec.image_url !== 'None' && rec.image_url !== 'nan' ? rec.image_url : null;
+
+  const alsScore   = ((rec.als_score   || 0) * 100).toFixed(0);
+  const prScore    = ((rec.pagerank_score || 0) * 100).toFixed(0);
+  const finalScore = ((rec.final_score  || 0) * 100).toFixed(0);
+
+  return `
+    <div class="product-card" style="animation-delay:${index * 0.05}s">
+      <span class="product-rank">#${rec.rank || index + 1}</span>
+      ${imgUrl
+        ? `<img class="product-image" src="${imgUrl}" alt="${rec.title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+           <div class="product-image-placeholder" style="display:none">📦</div>`
+        : `<div class="product-image-placeholder">📦</div>`
+      }
+      <div class="product-title">${rec.title || 'Product'}</div>
+      <div class="product-brand">${rec.brand || ''}</div>
+      <div class="stars">${renderStars(rating)}</div>
+      <div class="product-price"><span class="currency">$</span>${price.replace('$', '')}</div>
+      <span class="sentiment-badge ${sentiment}">${sentiment}</span>
+      <div class="score-bar-container">
+        <div class="score-label"><span>ALS Score</span><span>${alsScore}%</span></div>
+        <div class="score-bar"><div class="score-fill als" style="width:${alsScore}%"></div></div>
+        <div class="score-label"><span>PageRank</span><span>${prScore}%</span></div>
+        <div class="score-bar"><div class="score-fill pr" style="width:${prScore}%"></div></div>
+        <div class="score-label"><span>Final Score</span><span>${finalScore}%</span></div>
+        <div class="score-bar"><div class="score-fill final" style="width:${finalScore}%"></div></div>
+      </div>
+    </div>`;
+}
+
+// ── GET RECOMMENDATIONS ──
+async function getRecommendations() {
+  const userId   = document.getElementById('userIdInput').value.trim();
+  const { endpoint, apiKey } = getConfig();
+
+  if (!userId) { showError('Please enter a User ID.'); return; }
+
+  document.getElementById('mainDisplay').innerHTML = `
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Computing recommendations via Ray Serve pipeline...</p>
+      <p style="font-size:12px;margin-top:4px;color:#999">ALSScorer → PageRankReranker</p>
+    </div>`;
+
+  try {
+    const res = await fetch(`${endpoint}/recommend/${encodeURIComponent(userId)}`, {
+      headers: { 'X-API-Key': apiKey, 'ngrok-skip-browser-warning': 'true' }
+    });
+
+    if (!res.ok) throw new Error(`API error: ${res.status}`);
+    const data = await res.json();
+    renderRecommendations(data);
+
+  } catch (e) {
+    showError(`Failed to get recommendations: ${e.message}`);
+    renderDemoRecommendations(userId);
+  }
+}
+
+function renderRecommendations(data) {
+  const recs      = data.recommendations || [];
+  const coldStart = data.cold_start;
+  const userId    = data.user_id;
+
+  const cards = recs.map((r, i) => renderProductCard(r, i)).join('');
+
+  document.getElementById('mainDisplay').innerHTML = `
+    <div class="section-header">
+      <div>
+        <h2>Recommendations for You</h2>
+        <div class="meta">User: ${userId.substring(0,20)}... ${coldStart ? '• Popular products (new user)' : '• Personalized via ALS + PageRank'}</div>
+      </div>
+      <span style="font-size:12px;color:var(--amazon-secondary)">${recs.length} results</span>
+    </div>
+    <div class="products-grid">${cards}</div>`;
+}
+
+function renderDemoRecommendations(userId) {
+  const demoRecs = Array.from({length: 10}, (_, i) => ({
+    rank: i + 1,
+    title: ['Whirlpool Refrigerator Water Filter', 'LG Dryer Heating Element', 'Frigidaire Ice Maker Kit',
+            'Samsung Washer Door Boot Seal', 'GE Dishwasher Spray Arm', 'Bosch Range Knob Set',
+            'Maytag Dryer Belt', 'Kenmore Water Inlet Valve', 'KitchenAid Mixer Bowl',
+            'Electrolux Vacuum Filter'][i],
+    brand: ['Whirlpool', 'LG', 'Frigidaire', 'Samsung', 'GE', 'Bosch', 'Maytag', 'Kenmore', 'KitchenAid', 'Electrolux'][i],
+    price: [29.99, 45.00, 89.99, 34.50, 18.99, 22.00, 12.99, 38.00, 65.00, 14.99][i],
+    average_rating: [4.5, 4.2, 4.8, 4.1, 4.6, 4.3, 4.7, 4.0, 4.9, 4.4][i],
+    sentiment_label: 'Positive',
+    als_score: 0.9 - i * 0.06,
+    pagerank_score: 0.8 - i * 0.05,
+    final_score: 0.87 - i * 0.06
+  }));
+
+  renderRecommendations({
+    user_id: userId,
+    cold_start: false,
+    recommendations: demoRecs
+  });
+}
+
+// ── SIMULATE ──
+async function simulate() {
+  const nUsers   = parseInt(document.getElementById('nUsersSlider').value);
+  const { endpoint, apiKey } = getConfig();
+
+  document.getElementById('mainDisplay').innerHTML = `
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Running simulation for ${nUsers.toLocaleString()} users...</p>
+      <p style="font-size:12px;margin-top:4px;color:#999">Ray Serve distributing across parallel workers</p>
+    </div>`;
+
+  try {
+    const res = await fetch(`${endpoint}/simulate?n_users=${nUsers}`, {
+      method  : 'POST',
+      headers : { 'X-API-Key': apiKey, 'ngrok-skip-browser-warning': 'true' }
+    });
+
+    if (!res.ok) throw new Error(`API error: ${res.status}`);
+    const data = await res.json();
+    renderSimulateResults(data, nUsers);
+
+  } catch (e) {
+    showError(`Simulation failed: ${e.message}. Showing demo data.`);
+    renderDemoSimulation(nUsers);
+  }
+}
+
+function renderSimulateResults(data, nUsers) {
+  const topProducts  = data.top_products  || [];
+  const brandDist    = data.brand_distribution    || {};
+  const catDist      = data.category_distribution || {};
+  const sentDist     = data.sentiment_distribution || {};
+  const uniqueProds  = data.unique_products || topProducts.length;
+
+  // Destroy old charts
+  if (brandChart)    { brandChart.destroy();    brandChart = null; }
+  if (categoryChart) { categoryChart.destroy(); categoryChart = null; }
+
+  const cards = topProducts.slice(0, 10).map((p, i) => renderProductCard({
+    ...p, rank: i+1, als_score: 0, pagerank_score: 0,
+    final_score: p.recommendation_count / nUsers,
+    sentiment_label: 'Positive'
+  }, i)).join('');
+
+  document.getElementById('mainDisplay').innerHTML = `
+    <div class="section-header">
+      <div>
+        <h2>⚡ Simulation Results</h2>
+        <div class="meta">${nUsers.toLocaleString()} users simulated • ${uniqueProds.toLocaleString()} unique products recommended</div>
+      </div>
+    </div>
+
+    <div class="simulate-results">
+      <div class="simulate-stats">
+        <div class="stat-card">
+          <span class="stat-value">${nUsers.toLocaleString()}</span>
+          <div class="stat-label">Users Simulated</div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value">${uniqueProds.toLocaleString()}</span>
+          <div class="stat-label">Unique Products</div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value">${Object.keys(brandDist).length}</span>
+          <div class="stat-label">Brands Represented</div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value">${Object.keys(catDist).length}</span>
+          <div class="stat-label">Categories</div>
+        </div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-container">
+          <h4>📊 Top Brands Recommended</h4>
+          <div class="chart-wrapper">
+            <canvas id="brandChartCanvas"></canvas>
+          </div>
+        </div>
+        <div class="chart-container">
+          <h4>🏷️ Category Distribution</h4>
+          <div class="chart-wrapper">
+            <canvas id="categoryChartCanvas"></canvas>
+          </div>
+        </div>
+      </div>
+
+      
+    </div>
+
+    <div class="section-header">
+      <h2>🏆 Most Recommended Products</h2>
+    </div>
+    <div class="products-grid">${cards}</div>`;
+
+  // Draw charts
+  const COLORS = ['#FF9900','#232F3E','#007185','#067D62','#B12704','#FEBD69','#37475A','#FFA41C','#565959','#131921'];
+
+  const brandLabels = Object.keys(brandDist).slice(0, 8);
+  const brandVals   = brandLabels.map(k => brandDist[k]);
+  brandChart = new Chart(document.getElementById('brandChartCanvas'), {
+    type: 'bar',
+    data: { labels: brandLabels, datasets: [{ data: brandVals, backgroundColor: COLORS, borderWidth: 0 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+      scales: { y: { ticks: { font: { size: 10 } } }, x: { ticks: { font: { size: 10 }, maxRotation: 45 } } } }
+  });
+
+  const catLabels = Object.keys(catDist).slice(0, 6);
+  const catVals   = catLabels.map(k => catDist[k]);
+  categoryChart = new Chart(document.getElementById('categoryChartCanvas'), {
+    type: 'doughnut',
+    data: { labels: catLabels, datasets: [{ data: catVals, backgroundColor: COLORS, borderWidth: 2 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { font: { size: 10 }, boxWidth: 12 } } } }
+  });
+
+  
+}
+
+function renderDemoSimulation(nUsers) {
+  renderSimulateResults({
+    users_simulated: nUsers,
+    unique_products: 892,
+    top_products: Array.from({length: 10}, (_, i) => ({
+      parent_asin: `B00${i}DEMO`,
+      title: ['Waterdrop WD-F10 Water Filter', 'Whirlpool EDR1RXD1 Filter', 'Frigidaire PAULTRA Air Filter',
+              'Samsung DA29-00020B Filter', 'GE MSWF Refrigerator Filter', 'LG LT800P Water Filter',
+              'Bosch BORPLFTR50 Filter', 'Maytag UKF8001 Filter', 'KitchenAid Crisper Drawer',
+              'Electrolux EWF01 Filter'][i],
+      brand: ['Waterdrop','Whirlpool','Frigidaire','Samsung','GE','LG','Bosch','Maytag','KitchenAid','Electrolux'][i],
+      price: [29.99, 45.00, 18.99, 39.99, 49.00, 55.00, 42.00, 38.99, 65.00, 22.99][i],
+      recommendation_count: Math.floor(nUsers * (0.09 - i * 0.007)),
+      image_url: null
+    })),
+    brand_distribution: { Waterdrop: 2341, Whirlpool: 1987, Frigidaire: 1654, Samsung: 1432, GE: 1287, LG: 1102, Bosch: 934, Maytag: 812 },
+    category_distribution: { 'Water Filters': 3421, 'Replacement Parts': 2654, 'Ice Makers': 1987, 'Accessories': 1543, 'Vents': 987, 'Range Hoods': 765 },
+    sentiment_distribution: { Positive: 7632, Neutral: 1456, Negative: 912 }
+  }, nUsers);
+}
+</script>
+</body>
+</html>
+```
+
+<function_calls>
+<invoke name="present_files">
+<parameter name="filepaths">["/mnt/user-data/outputs/index.html"]

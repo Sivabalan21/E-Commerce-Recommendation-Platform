@@ -1,0 +1,29 @@
+main_category,recommendation_count,recommendation_pct,avg_final_score,avg_product_rating,unique_products,unique_users
+Tools & Home Improvement,6553322,50.14,0.3254,4.5,25267,1306893
+Appliances,3161558,24.19,0.3265,4.58,14252,1260974
+Amazon Home,1805548,13.81,0.3312,4.57,8320,1128241
+Industrial & Scientific,1015629,7.77,0.3334,4.61,2810,788880
+,427781,3.27,0.3189,4.61,2260,369936
+Automotive,22973,0.18,0.2834,4.51,346,22277
+All Electronics,21763,0.17,0.3128,4.72,93,21705
+Sports & Outdoors,9277,0.07,0.3188,4.79,59,9275
+Health & Personal Care,8586,0.07,0.2832,4.38,167,8522
+Musical Instruments,7857,0.06,0.291,4.7,49,7848
+Camera & Photo,5353,0.04,0.2988,4.48,28,5342
+Cell Phones & Accessories,5143,0.04,0.3025,4.38,48,5136
+Pet Supplies,4627,0.04,0.2953,4.64,31,4627
+Home Audio & Theater,4311,0.03,0.2965,4.88,19,4308
+Office Products,3425,0.03,0.2773,4.46,45,3422
+Computers,3116,0.02,0.316,4.7,25,3116
+Grocery,2517,0.02,0.2962,4.46,52,2513
+All Beauty,2004,0.02,0.2561,4.63,40,2003
+Baby,1998,0.02,0.2781,4.32,52,1998
+AMAZON FASHION,1669,0.01,0.2515,4.32,39,1667
+"Arts, Crafts & Sewing",1017,0.01,0.2671,4.46,17,1017
+Toys & Games,485,0.00,0.2991,4.27,20,485
+Portable Audio & Accessories,218,0.00,0.2848,4.25,5,218
+Movies & TV,91,0.00,0.2392,4.9,1,91
+Software,65,0.00,0.245,4.1,1,65
+Premium Beauty,61,0.00,0.2506,4.54,2,61
+Car Electronics,59,0.00,0.2923,4.5,1,59
+Digital Music,7,0.00,0.242,3.0,1,7

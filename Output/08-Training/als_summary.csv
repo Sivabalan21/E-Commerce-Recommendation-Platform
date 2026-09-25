@@ -1,0 +1,12 @@
+metric,value
+total_interactions,1872816
+unique_users,1654544
+unique_products,75940
+best_rank,20
+best_regParam,0.1
+best_maxIter,10
+train_rmse,0.1614
+test_rmse,2.2436
+test_mae,1.9342
+users_with_recs,1307046
+grid_search_used,False

@@ -1,0 +1,197 @@
+
+============================================================
+STEP 1 — LOADING REVIEWS DATASET
+============================================================
+
+Total rows     : 2,128,605
+Total columns  : 10
+Columns        : ['asin', 'helpful_vote', 'images', 'parent_asin', 'rating', 'text', 'timestamp', 'title', 'user_id', 'verified_purchase']
+
+============================================================
+STEP 2 — SCHEMA
+============================================================
+  asin                      StringType()         nullable=True
+  helpful_vote              LongType()           nullable=True
+  images                    ArrayType(StructType([StructField('attachment_type', StringType(), True), StructField('large_image_url', StringType(), True), StructField('medium_image_url', StringType(), True), StructField('small_image_url', StringType(), True)]), True) nullable=True
+  parent_asin               StringType()         nullable=True
+  rating                    DoubleType()         nullable=True
+  text                      StringType()         nullable=True
+  timestamp                 LongType()           nullable=True
+  title                     StringType()         nullable=True
+  user_id                   StringType()         nullable=True
+  verified_purchase         BooleanType()        nullable=True
+
+============================================================
+STEP 3 — NULL AND MISSING VALUE ANALYSIS
+============================================================
+
+Column                      Null Count     Null %     Non-Null
+--------------------------------------------------------------
+user_id                              0       0.0%    2,128,605
+asin                                 0       0.0%    2,128,605
+parent_asin                          0       0.0%    2,128,605
+rating                               0       0.0%    2,128,605
+text                                95    0.0045%    2,128,510
+verified_purchase                    0       0.0%    2,128,605
+helpful_vote                         0       0.0%    2,128,605
+timestamp                            0       0.0%    2,128,605
+title                                0       0.0%    2,128,605
+
+============================================================
+STEP 4 — RATING DISTRIBUTION
+============================================================
+Min rating        : 1.0
+Max rating        : 5.0
+Avg rating        : 4.2215
+Stddev rating     : 1.3808
+Invalid (< 1.0)   : 0
+Invalid (> 5.0)   : 0
+
+Stars             Count   Percentage
+------------------------------------
+1 star           250,453       11.77%
+2 stars           79,664        3.74%
+3 stars          104,047        4.89%
+4 stars          208,216        9.78%
+5 stars        1,486,225       69.82%
+
+============================================================
+STEP 5 — VERIFIED PURCHASE BREAKDOWN
+============================================================
+Verified purchases    :  2,040,064  (95.84%)
+Unverified purchases  :     88,541  (4.16%)
+Null verified field   :          0
+
+============================================================
+STEP 6 — UNIQUE COUNTS (approx_count_distinct)
+============================================================
+Unique users          :  1,808,565
+Unique ASINs          :    101,011
+Unique parent ASINs   :     93,671
+
+============================================================
+STEP 7 — REVIEW TEXT ANALYSIS
+============================================================
+Min text length       : 0
+Max text length       : 30,004
+Avg text length       : 169.51 chars
+Stddev text length    : 279.98 chars
+Null text rows        : 0
+No alphabetic chars   : 4,141  (drop criterion)
+Contains HTML tags    : 159,509  (strip in cleaning)
+
+Bucket                      Count   Percentage
+----------------------------------------------
+0 chars                        95         0.0%
+1-19 chars                268,054       12.59%
+100-499 chars             843,188       39.61%
+1000+ chars                35,542        1.67%
+20-99 chars               877,976       41.25%
+500-999 chars             103,750        4.87%
+
+============================================================
+STEP 8 — TEMPORAL COVERAGE
+============================================================
+Oldest review : 2000-10-23 14:37:23
+Newest review : 2023-09-12 16:29:17.016000
+
+Year            Count   Percentage
+----------------------------------
+2000                1         0.0%
+2002                1         0.0%
+2003                8         0.0%
+2004               16         0.0%
+2005               80         0.0%
+2006              182        0.01%
+2007              621        0.03%
+2008              883        0.04%
+2009            1,539        0.07%
+2010            3,537        0.17%
+2011            7,636        0.36%
+2012           15,219        0.71%
+2013           43,618        2.05%
+2014           77,353        3.63%
+2015          122,696        5.76%
+2016          153,916        7.23%
+2017          169,785        7.98%
+2018          189,599        8.91%
+2019          261,004       12.26%
+2020          311,251       14.62%
+2021          345,120       16.21%
+2022          299,487       14.07%
+2023          125,053        5.87%
+
+============================================================
+STEP 9 — DUPLICATE DETECTION
+============================================================
+Exact duplicates (user+asin+timestamp) : 22,657
+Same user reviewed same product twice  : 19,143
+
+user_id                             asin             count
+----------------------------------------------------------
+AGBGK5JONOQ7OJEJJVOPZR4X2ZKA        B07P3H652K          11
+AFB32N5EIVER7YQSEYCOX3M46OEQ        B084D61MML          10
+AEIJV4O23Y5XAGGCOYQAVWNUBYLQ        B08KFL6B5P           9
+AGPD4DZYLFIVX36ISLH3VFCO36SQ        B076P93X7V           9
+AENHAAJGKM3ZZZIUS4TLQYB6XMQA        B07TGD2245           9
+
+============================================================
+STEP 10 — HELPFUL VOTE ANALYSIS
+============================================================
+Min helpful votes     : 0
+Max helpful votes     : 5,704
+Avg helpful votes     : 0.9289
+Total helpful votes   : 1,977,233
+Zero vote reviews     : 1,719,985  (80.8%)
+More than 10 votes    : 31,872
+More than 100 votes   : 1,594
+
+============================================================
+STEP 11 — ASIN vs PARENT_ASIN ANALYSIS
+============================================================
+ASIN equals parent_asin   :  1,390,229  (65.31%)
+ASIN differs parent_asin  :    738,376  (34.69%)
+
+NOTE: ALS will use parent_asin to group product variants.
+
+============================================================
+STEP 12 — TOP REVIEWED PRODUCTS AND MOST ACTIVE USERS
+============================================================
+Top 10 most reviewed products (parent_asin):
+parent_asin       review_count
+------------------------------
+B0B3DB5HTC              12,027
+B07RNJY499              11,620
+B07WTXWC32               8,519
+B08YBGCNHP               7,330
+B000AST3AK               7,030
+B01KJ2FVFW               6,140
+B00UXG4WR8               5,896
+B000DLB2FI               5,736
+B081KSD3BK               5,668
+B09YC8YCV6               5,401
+
+Top 10 most active reviewers:
+user_id                               review_count
+--------------------------------------------------
+AHJGIPM2BSL2PQIP2223Y2WVVAPQ                   111
+AHKNU4DNSSZYUFUOBEUBGLF7I7EA                    66
+AF5NXJDWHE77HSJ4LERATTFVS2LA                    66
+AHEYN6GU45YH2SZCFXVVNWAPOJIQ                    57
+AEUSUUHXIIA5R4Q3WJB53GKACOVQ                    50
+AGBUVBEWICTFWY26GY6PJ6EWRCUQ                    48
+AEOV4JIKICCCT52K5NT3V32A6Y3Q                    48
+AGLKQFJXDPM6U6S7GMQKOYAHHVIA                    46
+AFQMMW3VP54Q3H7UTYY2UQ4EL7RA                    45
+AH6I6SERAWV53X6BEYMKSVXGOB3A                    43
+
+Reviews per user statistics:
+Min reviews per user  : 1
+Max reviews per user  : 111
+Avg reviews per user  : 1.21
+Median reviews/user   : 1
+95th pct reviews/user : 2
+
+============================================================
+STEP 13 — SAVING OUTPUTS
+============================================================

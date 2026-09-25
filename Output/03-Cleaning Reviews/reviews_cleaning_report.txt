@@ -1,0 +1,133 @@
+
+============================================================
+STEP 1 — LOADING RAW REVIEWS
+============================================================
+Raw row count          : 2,128,605
+Columns                : ['asin', 'helpful_vote', 'images', 'parent_asin', 'rating', 'text', 'timestamp', 'title', 'user_id', 'verified_purchase']
+
+============================================================
+STEP 2 — DROP NULL user_id OR asin
+============================================================
+Rows dropped           : 0
+Rows remaining         : 2,128,605
+
+============================================================
+STEP 3 — DROP INVALID RATINGS
+============================================================
+Rows dropped           : 0
+Rows remaining         : 2,128,605
+
+============================================================
+STEP 4 — DROP REVIEWS WITH NO ALPHABETIC CHARACTERS
+============================================================
+Rows dropped           : 4,141
+Rows remaining         : 2,124,464
+
+NOTE: Short reviews like 'Good', 'Bad', 'Ok' are kept.
+Only rows with zero alphabetic characters are removed.
+
+============================================================
+STEP 5 — STRIP HTML TAGS FROM REVIEW TEXT
+============================================================
+Reviews with HTML tags : 159,833
+HTML tags stripped from text field.
+
+============================================================
+STEP 6 — DEDUPLICATE BY (user_id, parent_asin)
+============================================================
+Duplicate pairs removed: 24,539
+Rows remaining         : 2,099,925
+
+NOTE: Used parent_asin (not asin) so product variants
+are treated as the same product for deduplication.
+
+============================================================
+STEP 7 — NORMALIZE TIMESTAMP
+============================================================
+Added timestamp_seconds : timestamp divided by 1000
+Added review_date       : human readable date column
+
+============================================================
+STEP 8 — SELECT FINAL COLUMNS
+============================================================
+Final columns selected:
+  user_id
+  parent_asin
+  asin
+  rating
+  review_text
+  helpful_vote
+  verified_purchase
+  timestamp
+  review_date
+
+============================================================
+STEP 9 — FINAL VALIDATION
+============================================================
+Raw row count          : 2,128,605
+Clean row count        : 2,099,925
+Total rows removed     : 28,680
+Retention rate         : 98.65%
+
+Breakdown of rows removed:
+  Null user_id/asin/parent_asin : 0
+  Invalid ratings               : 0
+  No alphabetic text            : 4,141
+  Duplicate user-product pairs  : 24,539
+
+Null check on clean dataset:
+
+Column                      Null Count
+----------------------------------------
+user_id                              0
+parent_asin                          0
+asin                                 0
+rating                               0
+review_text                          0
+helpful_vote                         0
+verified_purchase                    0
+timestamp                            0
+review_date                          0
+
+Rating distribution after cleaning:
+Stars             Count   Percentage
+------------------------------------
+1.0             246,624       11.74%
+2.0              78,603        3.74%
+3.0             102,769        4.89%
+4.0             205,563        9.79%
+5.0           1,466,366       69.83%
+
+Sample clean records (3 rows):
+
+  Record 1:
+    user_id          : AE2225K3KY4D3KKSN6I2AHBVR4QQ
+    parent_asin      : B07DRDHHH4
+    rating           : 5.0
+    review_text      : My parents have an old Whirlpool washing machine that began to periodically squeal and produce a bur
+    verified_purchase: True
+    review_date      : 2022-08-09
+
+  Record 2:
+    user_id          : AE222D66NEFEM4KJMY663LKZPFTQ
+    parent_asin      : B0B3H4B98L
+    rating           : 5.0
+    review_text      : every thing came in fine thanks
+    verified_purchase: True
+    review_date      : 2015-02-17
+
+  Record 3:
+    user_id          : AE223ETXPHATIAQ3ESK33CD57TMA
+    parent_asin      : B014LOFZTQ
+    rating           : 5.0
+    review_text      : I prefer to use my own coffee mixture and this works like a charm. Wonderful accessory. Easy to use,
+    verified_purchase: True
+    review_date      : 2016-03-01
+
+============================================================
+STEP 10 — SAVING CLEAN DATA
+============================================================
+Clean data saved as Parquet to:
+  hdfs:///user/ss21176_nyu_edu/ecommerce/cleaning/appliances/reviews/cleaned_reviews
+  Format: Parquet (columnar, optimized for Spark)
+  Rows: 2,099,925

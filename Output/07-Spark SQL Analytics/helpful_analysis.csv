@@ -1,0 +1,29 @@
+main_category,review_count,avg_helpful_votes,max_helpful_votes,total_helpful_votes,pct_highly_helpful
+Appliances,527273,1.71,5704,903785,2.70
+Camera & Photo,2629,1.51,698,3969,2.32
+Grocery,11402,1.49,1725,16985,1.51
+All Electronics,2394,1.26,150,3013,2.55
+"Arts, Crafts & Sewing",134,1.25,35,168,0.75
+Home Audio & Theater,422,1.13,49,478,2.84
+Cell Phones & Accessories,1229,1.07,53,1312,1.55
+Sports & Outdoors,1332,1.05,130,1395,1.65
+Pet Supplies,584,1.04,53,605,1.88
+Automotive,7378,0.98,389,7226,1.56
+Musical Instruments,461,0.97,93,445,1.52
+,24265,0.93,472,22642,1.55
+Office Products,1692,0.83,52,1410,2.42
+Industrial & Scientific,86615,0.81,347,70413,1.39
+Health & Personal Care,5624,0.73,295,4115,1.53
+Amazon Home,510793,0.71,1627,360402,1.22
+Baby,3677,0.66,64,2441,1.33
+Premium Beauty,12,0.58,5,7,0.00
+Digital Music,2,0.5,1,1,0.00
+Tools & Home Improvement,681926,0.48,1641,325919,0.75
+AMAZON FASHION,1002,0.47,25,472,0.30
+Portable Audio & Accessories,275,0.45,33,123,1.09
+Toys & Games,630,0.44,17,280,0.48
+All Beauty,411,0.27,8,109,0.00
+Car Electronics,95,0.24,5,23,0.00
+Computers,540,0.15,6,81,0.00
+Software,16,0.13,1,2,0.00
+Movies & TV,3,0.0,0,0,0.00

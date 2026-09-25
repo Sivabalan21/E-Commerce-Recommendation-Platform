@@ -1,0 +1,227 @@
+
+============================================================
+STEP 1 — LOADING METADATA DATASET
+============================================================
+Total rows     : 94,327
+Total columns  : 12
+Columns        : ['parent_asin', 'title', 'main_category', 'store', 'price', 'average_rating', 'rating_number', 'features', 'description', 'categories', 'bought_together', 'images']
+
+============================================================
+STEP 2 — SCHEMA
+============================================================
+  parent_asin               StringType()                   nullable=True
+  title                     StringType()                   nullable=True
+  main_category             StringType()                   nullable=True
+  store                     StringType()                   nullable=True
+  price                     DoubleType()                   nullable=True
+  average_rating            DoubleType()                   nullable=True
+  rating_number             LongType()                     nullable=True
+  features                  ArrayType(StringType(), True)  nullable=True
+  description               ArrayType(StringType(), True)  nullable=True
+  categories                ArrayType(StringType(), True)  nullable=True
+  bought_together           StringType()                   nullable=True
+  images                    ArrayType(StructType([StructField('thumb', StringType(), True), StructField('large', StringType(), True), StructField('variant', StringType(), True), StructField('hi_res', StringType(), True)]), True) nullable=True
+
+Sample records (2 rows):
+  parent_asin    : B08Z743RRD
+  title          : ROVSUN Ice Maker Machine Countertop, Make 44lbs Ice in 24 Hours, Compact & Porta
+  main_category  : Industrial & Scientific
+  store          : ROVSUN
+  price          : None
+  average_rating : 3.7
+  rating_number  : 61
+
+  parent_asin    : B097BQDGHJ
+  title          : HANSGO Egg Holder for Refrigerator, Deviled Eggs Dispenser Egg Storage Stackable
+  main_category  : Tools & Home Improvement
+  store          : HANSGO
+  price          : None
+  average_rating : 4.2
+  rating_number  : 75
+
+
+============================================================
+STEP 3 — NULL AND MISSING VALUE ANALYSIS
+============================================================
+
+Column                      Null Count     Null %     Non-Null
+--------------------------------------------------------------
+parent_asin                          0       0.0%       94,327
+title                                9    0.0095%       94,318
+main_category                    4,676    4.9572%       89,651
+store                              916    0.9711%       93,411
+price                           47,601   50.4638%       46,726
+average_rating                       0       0.0%       94,327
+rating_number                        0       0.0%       94,327
+features                             0       0.0%       94,327
+description                          0       0.0%       94,327
+categories                           0       0.0%       94,327
+images                               0       0.0%       94,327
+bought_together                 94,327     100.0%            0
+
+============================================================
+STEP 4 — PRICE FIELD ANALYSIS
+============================================================
+Products with price      :     46,726  (49.54%)
+Products without price   :     47,601  (50.46%)
+Min price                : 0.01
+Max price                : 21095.62
+Avg price                : 86.48
+Stddev price             : 325.32
+Zero or negative price   :          0
+Price over $1000         :        606
+
+Price range distribution:
+Range                       Count   Percentage
+----------------------------------------------
+$0.01 - $9.99               5,600        5.94%
+$10 - $49.99               27,998       29.68%
+$100 - $499.99              5,572        5.91%
+$1000+                        607        0.64%
+$50 - $99.99                6,477        6.87%
+$500 - $999.99                472         0.5%
+
+============================================================
+STEP 5 — AVERAGE RATING AND RATING NUMBER ANALYSIS
+============================================================
+Null average_rating      :          0
+Min average_rating       : 1.0
+Max average_rating       : 5.0
+Mean average_rating      : 4.1189
+
+Null rating_number       :          0
+Min rating_number        : 1
+Max rating_number        : 90,203
+Mean rating_number       : 136.37
+Zero rating_number       :          0
+Under 5 ratings          :     28,584
+Over 1000 ratings        :      2,131
+
+============================================================
+STEP 6 — CATEGORIES FIELD ANALYSIS
+============================================================
+Null or empty categories :      3,285
+Min category depth       : 0
+Max category depth       : 5
+Avg category depth       : 3.32
+
+Top 15 main categories by product count:
+main_category                                      count   percentage
+--------------------------------------------------------------------
+Tools & Home Improvement                          42,694       45.26%
+Appliances                                        25,572       27.11%
+Amazon Home                                       13,915       14.75%
+Industrial & Scientific                            5,521        5.85%
+None                                               4,676        4.96%
+Automotive                                           568         0.6%
+Health & Personal Care                               268        0.28%
+All Electronics                                      168        0.18%
+Sports & Outdoors                                    124        0.13%
+Grocery                                               95         0.1%
+Cell Phones & Accessories                             85        0.09%
+Musical Instruments                                   83        0.09%
+Baby                                                  82        0.09%
+AMAZON FASHION                                        71        0.08%
+Office Products                                       68        0.07%
+
+Top 15 leaf subcategories (last element of categories array):
+subcategory                                        count
+--------------------------------------------------------
+Parts & Accessories                               17,628
+Replacement Parts                                 13,785
+Water Filters                                      5,897
+Washer Parts & Accessories                         3,578
+Ice Makers                                         3,278
+Accessories                                        3,063
+Reusable Filters                                   2,942
+Refrigerators                                      2,135
+Knobs                                              2,100
+Range Hoods                                        2,063
+Cooktop Parts & Accessories                        1,809
+Drain Pumps                                        1,624
+Disposable Filters                                 1,544
+Hoses                                              1,386
+Portable Washers                                   1,274
+
+============================================================
+STEP 7 — IMAGES FIELD ANALYSIS
+============================================================
+Products with images     :     94,326  (100.0%)
+Products without images  :          1  (0.0%)
+Avg images per product   : 4.0
+Max images per product   : 25
+
+Checking hi_res image URL availability:
+Products with hi_res URL :     77,707
+Products missing hi_res  :     16,619
+
+============================================================
+STEP 8 — STORE (BRAND) FIELD ANALYSIS
+============================================================
+Null or empty store      :        916  (0.97%)
+Unique stores (brands)   :     12,568
+
+Top 15 stores by product count:
+store                                    count   percentage
+----------------------------------------------------------
+Whirlpool                                8,687        9.21%
+GE                                       4,994        5.29%
+FRIGIDAIRE                               2,912        3.09%
+SAMSUNG                                  2,245        2.38%
+LG                                       1,876        1.99%
+UpStart Components                       1,519        1.61%
+Frigidaire                               1,341        1.42%
+Upstart Battery                          1,305        1.38%
+Supplying Demand                         1,084        1.15%
+ForeverPRO                               1,024        1.09%
+Edgewater Parts                            910        0.96%
+ClimaTek                                   833        0.88%
+ERP                                        775        0.82%
+Kenmore                                    637        0.68%
+Supco                                      621        0.66%
+
+============================================================
+STEP 9 — FEATURES AND DESCRIPTION ANALYSIS
+============================================================
+Products with features    :     77,784  (82.46%)
+Products without features :     16,543  (17.54%)
+Avg features per product  : 3.56
+Max features per product  : 17
+
+Products with description :     62,155  (65.89%)
+Products without desc     :     32,172  (34.11%)
+
+============================================================
+STEP 10 — BOUGHT TOGETHER ANALYSIS
+============================================================
+Null bought_together     :     94,327  (100.0%)
+Has bought_together      :          0  (0.0%)
+
+NOTE: bought_together is null for all products in this dataset.
+Co-purchase graph will be built from review co-occurrence instead.
+
+============================================================
+STEP 12 — DUPLICATE DETECTION
+============================================================
+Duplicate parent_asin     :          0
+Duplicate titles          :      3,578
+
+Top 5 most duplicated titles:
+title                                                    count
+--------------------------------------------------------------
+AMI PARTS                                                  161
+water filter                                                24
+AMI                                                         21
+EPPWFU01 PureAdvantage PWF-1 Compatible Replacement FP      19
+Whirlpool D7824706Q                                         14
+
+============================================================
+STEP 13 — UNIQUE COUNTS
+============================================================
+Unique parent ASINs       :     93,671
+Unique main categories    :         31
+Unique stores             :     12,568
+
+============================================================
+STEP 14 — SAVING OUTPUTS
+============================================================

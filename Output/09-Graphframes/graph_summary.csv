@@ -1,0 +1,11 @@
+metric,value
+total_reviews,1872816
+total_products,77698
+users_with_multi_prods,202618
+total_edges,448393
+unique_weighted_edges,391037
+total_vertices,77633
+pagerank_min,0.4290509332116738
+pagerank_max,648.7072188902782
+pagerank_avg,1.0
+communities_found,30730

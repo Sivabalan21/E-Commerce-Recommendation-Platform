@@ -1,0 +1,11 @@
+metric,value
+raw_row_count,2128605
+clean_row_count,2099925
+total_rows_removed,28680
+retention_rate_pct,98.65
+dropped_null_ids,0
+dropped_invalid_ratings,0
+dropped_no_alpha_text,4141
+dropped_duplicates,24539
+html_reviews_cleaned,159833
+final_columns,"['user_id', 'parent_asin', 'asin', 'rating', 'review_text', 'helpful_vote', 'verified_purchase', 'timestamp', 'review_date']"

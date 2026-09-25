@@ -1,0 +1,138 @@
+
+============================================================
+STEP 1 — LOADING JOINED DATA
+============================================================
+Total rows     : 1,872,816
+Columns        : ['parent_asin', 'user_id', 'asin', 'rating', 'review_text', 'helpful_vote', 'verified_purchase', 'timestamp', 'review_date', 'title', 'main_category', 'subcategory', 'brand', 'price', 'average_rating', 'rating_number', 'image_url', 'features']
+
+============================================================
+STEP 2 — APPLYING VADER SENTIMENT ANALYSIS
+============================================================
+Applying VADER to review_text column...
+Using mapPartitions — one analyzer instance per partition...
+Scoring thresholds:
+  Positive : compound score >= +0.05
+  Negative : compound score <= -0.05
+  Neutral  : compound score between -0.05 and +0.05
+Sentiment scored rows : 1,872,816
+
+============================================================
+STEP 3 — SENTIMENT DISTRIBUTION
+============================================================
+Label               Count   Percentage
+--------------------------------------
+Negative          252,663       13.49%
+Neutral           240,784       12.86%
+Positive        1,379,369       73.65%
+
+============================================================
+STEP 4 — SENTIMENT vs RATING ANALYSIS
+============================================================
+Average sentiment score per star rating:
+Rating       Avg Sentiment      Count
+--------------------------------------
+1.0                -0.1313    221,095
+2.0                  0.027     69,829
+3.0                 0.1805     90,905
+4.0                 0.4387    181,199
+5.0                 0.5513  1,309,788
+
+Disagreement analysis:
+High rating (4-5 stars) but Negative sentiment : 79,138  (4.23%)
+Low rating (1-2 stars) but Positive sentiment  : 92,439  (4.94%)
+
+============================================================
+STEP 5 — SENTIMENT BY MAIN CATEGORY
+============================================================
+main_category                        avg_score  positive%  negative%    reviews
+------------------------------------------------------------------------------
+Tools & Home Improvement                0.4081     72.91%     13.28%    681,926
+Appliances                              0.4144     72.82%     15.38%    527,273
+Amazon Home                             0.4556     76.02%     11.47%    510,793
+Industrial & Scientific                 0.3902     70.99%     15.25%     86,615
+None                                    0.4065     72.28%     14.86%     24,265
+Grocery                                 0.4702     76.86%     12.05%     11,402
+Automotive                              0.3872     71.97%     15.29%      7,378
+Health & Personal Care                  0.3785     70.13%     14.83%      5,624
+Baby                                    0.4098     72.18%     14.31%      3,677
+Camera & Photo                          0.4547     76.99%     12.02%      2,629
+
+============================================================
+STEP 6 — SENTIMENT BY BRAND (top 15)
+============================================================
+brand                           avg_score  positive%  negative%    reviews
+-------------------------------------------------------------------------
+Whirlpool                          0.4213     74.19%     12.03%    108,584
+Frigidaire                         0.3816     70.92%     15.19%     68,580
+Ge                                 0.3867     71.53%     14.01%     67,653
+Bluestars                          0.3866     70.99%     14.16%     46,587
+Waterdrop                          0.4841     79.72%      8.14%     44,145
+Lg                                 0.3748     70.94%     15.54%     31,736
+Samsung                            0.3412     68.55%     17.98%     30,632
+K&j                                0.5428      83.5%      4.29%     25,790
+Icepure                            0.4513     77.32%      9.47%     21,228
+Pureline                           0.4837      79.2%      8.58%     19,931
+Lifetime Appliance Parts           0.4408      75.2%     12.19%     18,678
+Perfect Pod                        0.4978     79.18%     10.39%     18,111
+Ami Parts                          0.3627     68.92%     15.85%     17,122
+Kitchen Basics 101                 0.4504     75.36%     12.49%     16,414
+Everydrop By Whirlpool             0.3091     66.07%     16.48%     15,828
+
+============================================================
+STEP 7 — SENTIMENT BY SUBCATEGORY (top 15)
+============================================================
+subcategory                          avg_score  positive%  negative%    reviews
+------------------------------------------------------------------------------
+Water Filters                           0.4341      75.8%     10.59%    308,408
+Replacement Parts                       0.3869     70.85%     14.14%    243,115
+Reusable Filters                        0.4677     76.25%     13.09%    176,268
+Ice Makers                              0.4047     71.91%      18.1%    126,699
+Parts & Accessories                     0.4004     72.27%     13.27%    123,348
+Disposable Filters                      0.4623     77.04%       8.4%    113,786
+Accessories                             0.4161      72.6%     13.72%     87,598
+Portable Washers                        0.4543     73.31%     17.38%     49,901
+Washer Parts & Accessories              0.3817     70.98%     14.63%     41,802
+Vents                                    0.374     70.52%     15.82%     34,076
+Baskets                                 0.4329     75.32%     14.58%     31,428
+Range Hoods                             0.5148     79.55%     13.39%     30,590
+Drain Pumps                             0.4055     73.02%      14.3%     29,963
+Drip Pans                               0.4573      75.6%     12.48%     26,508
+Knobs                                   0.3677     68.66%     17.77%     26,279
+
+============================================================
+STEP 8 — TOP AND BOTTOM PRODUCTS BY SENTIMENT
+============================================================
+Top 10 products with highest avg sentiment (min 100 reviews):
+parent_asin     title                                          avg_score  reviews
+----------------------------------------------------------------------------------
+B0BZ6ZX75Z      Large Induction Cooktop Protector Mat, (Magn       0.776      128
+B09MRWZ96Z      Wine and Beverage Refrigerator,Velieta 24 In      0.7504      128
+B015WVJMBE      Stainless Steel French Press Coffee Maker Wi      0.7436      261
+B0051HEFAS      Kuissential SlickDrip Pour Over Coffee Dripp      0.7397      759
+B001PVYW48      Keurig Carousel, Black                            0.7326      490
+B09GL6SRNJ      JoGo - Portable Coffee and Tea Brewing Straw      0.7318      148
+B07XC4T5VP      (1-Pack, Large 12in x 12in) Organic Cotton C      0.7157      548
+B083QPW2G9      Cloth Reusable Cone Coffee Filter (Size #2)       0.7151      212
+B0C3WMC4K2      TrueGem Stove Gap Covers - 316 Stainless Ste      0.7113      310
+B0BMV7X9YJ      Aeropress Original Coffee and Espresso Maker      0.7107    2,338
+
+Bottom 10 products with lowest avg sentiment (min 100 reviews):
+parent_asin     title                                          avg_score  reviews
+----------------------------------------------------------------------------------
+B005KT4LK6      Whirlpool WTW8800YW Cabrio 4.6 Cu. Ft. White     -0.2778      112
+B0768MWZJD      Kenmore 4672483 4 Door Bottom Freezer Refrig     -0.1098      164
+B07S4778LZ      [Latest Version] UPGRADED W10350376 Dishwash     -0.0968      119
+B07FNNWMVY      Maikoa Flower-type Washing Machine Floating      -0.0827      109
+B0060T4TOI      Hunter 31960 Demineralization Tablet for 310     -0.0748      100
+B00LTXYPCG      General Electric WR17X11459 Cup Drive Ice Di       -0.05      109
+B081K5T5HB      Deflecto Magnetic Vent Cover, For Sidewall a      0.0322      891
+B07QPBTR4B      AquaPlumb RKG Gas Range Knob- 5PC/Card            0.0328      401
+B08MWFMRK8      WAQIA Mini Washing Machine Portable Ultrason      0.0412      171
+B08BDKHFXL      Automatic Self-Cleaning Portable Electric Co      0.0531      214
+
+============================================================
+STEP 9 — SAVING OUTPUTS
+============================================================
+Sentiment data saved as Parquet.
+Location : hdfs:///user/ss21176_nyu_edu/ecommerce/sentiment/appliances/sentiment_data
+Rows     : 1,872,816

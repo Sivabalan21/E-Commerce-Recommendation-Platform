@@ -1,0 +1,29 @@
+main_category,review_count,avg_rating,avg_sentiment,positive_pct,negative_pct,avg_helpful_votes
+Tools & Home Improvement,681926,4.31,0.4081,72.91,13.28,0.48
+Appliances,527273,4.1,0.4144,72.82,15.38,1.71
+Amazon Home,510793,4.26,0.4556,76.02,11.47,0.71
+Industrial & Scientific,86615,4.13,0.3902,70.99,15.25,0.81
+,24265,4.11,0.4065,72.28,14.86,0.93
+Grocery,11402,4.26,0.4702,76.86,12.05,1.49
+Automotive,7378,4.19,0.3872,71.97,15.29,0.98
+Health & Personal Care,5624,4.09,0.3785,70.13,14.83,0.73
+Baby,3677,4.03,0.4098,72.18,14.31,0.66
+Camera & Photo,2629,4.23,0.4547,76.99,12.02,1.51
+All Electronics,2394,4.32,0.375,69.84,13.66,1.26
+Office Products,1692,4.5,0.4433,75.30,8.98,0.83
+Sports & Outdoors,1332,4.08,0.3983,71.02,13.96,1.05
+Cell Phones & Accessories,1229,4.4,0.4543,76.48,11.07,1.07
+AMAZON FASHION,1002,4.18,0.3954,71.56,12.48,0.47
+Toys & Games,630,4.22,0.4316,73.97,10.48,0.44
+Pet Supplies,584,4.35,0.4901,77.23,13.18,1.04
+Computers,540,4.29,0.4116,75.37,12.96,0.15
+Musical Instruments,461,4.32,0.3877,72.45,13.88,0.97
+Home Audio & Theater,422,4.04,0.3577,68.01,18.01,1.13
+All Beauty,411,4.35,0.3956,70.32,14.11,0.27
+Portable Audio & Accessories,275,4.16,0.4437,76.73,12.00,0.45
+"Arts, Crafts & Sewing",134,4.58,0.6033,85.82,4.48,1.25
+Car Electronics,95,3.99,0.3658,67.37,18.95,0.24
+Software,16,4.63,0.4576,81.25,6.25,0.13
+Premium Beauty,12,4.25,0.3521,58.33,25.00,0.58
+Movies & TV,3,5.0,0.5945,100.00,0.00,0.0
+Digital Music,2,3.0,-0.2769,50.00,50.00,0.5
